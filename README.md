@@ -42,6 +42,8 @@ rc.on("PAUSE_PRESSED", function() {
 rc.motor("ENABLE");
 rc.motor(0.3);
 
+rc.servo(1, .5);
+
 /* Read encoder every second until PAUSE button pressed */
 setInterval(function() {
     if(rc.state() == "RUNNING") {
