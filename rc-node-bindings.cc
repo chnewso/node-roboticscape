@@ -5,7 +5,7 @@ extern "C" {
     #include <stdio.h>
     #include <string.h>
     #include <uv.h>
-    #include <roboticscape.h>
+    #include "roboticscape.h"
 }
 
 typedef void (*void_fp)();
@@ -16,7 +16,7 @@ namespace rc {
         rc_disable_signal_handler();
         info.GetReturnValue().Set(i);
     }
-    
+
     static void RCexit(void*) {
         fprintf(stderr, "info: running rc_cleanup()\n");
         rc_cleanup();
@@ -87,16 +87,16 @@ namespace rc {
             return;
         }
     }
-    
+
     struct Handoff {
         Nan::Callback *cb;
     };
-    
+
     static void doHandoff(uv_async_t* handle) {
         Nan::HandleScope scope;
         Handoff *h = static_cast<Handoff *>(handle->data);
 #ifdef DEBUG
-        fprintf(stderr, "Handoff %p using callback object %p to call %p\n", 
+        fprintf(stderr, "Handoff %p using callback object %p to call %p\n",
             (void *)h, (void *)h->cb, h->cb->GetFunction());
         fflush(stderr);
 #endif
@@ -202,9 +202,9 @@ namespace rc {
 #ifdef DEBUG
         fprintf(stderr, "Registered event %p " \
             "with C callback %p, handoff %p, callback object %p " \
-            "and C++ function %p using function %p\n", 
-            (void *)event, 
-            (void* )fp, (void *)h, h->cb, 
+            "and C++ function %p using function %p\n",
+            (void *)event,
+            (void* )fp, (void *)h, h->cb,
             h->cb->GetFunction(), (void *)set);
         fflush(stderr);
 #endif
@@ -329,6 +329,20 @@ namespace rc {
         info.GetReturnValue().Set(value);
     }
 
+    void RCservo(const Nan::FunctionCallbackInfo<v8::Value>& info) {
+        int result = 0;
+        if (info.Length() != 2) {
+            Nan::ThrowTypeError("Wrong number of arguments (should be 2)");
+            return;
+        }
+        if (!info[0]->IsInt32()) {
+            Nan::ThrowTypeError("Wrong type for argument (should be integer)");
+            return;
+        }
+        result = rc_send_servo_pulse_normalized((int)info[0]->ToInt32()->Value(), (float)info[1]->ToNumber()->Value());
+        info.GetReturnValue().Set(result);
+    }
+
     void ModuleInit(v8::Local<v8::Object> exports) {
         /* Init and Cleanup */
         exports->Set(Nan::New("initialize").ToLocalChecked(),
@@ -351,6 +365,9 @@ namespace rc {
         /* ADC */
         exports->Set(Nan::New("adc").ToLocalChecked(),
             Nan::New<v8::FunctionTemplate>(RCadc)->GetFunction());
+        /* Servos */
+        exports->Set(Nan::New("servo").ToLocalChecked(),
+            Nan::New<v8::FunctionTemplate>(RCservo)->GetFunction());
         node::AtExit(RCexit);
     }
 
