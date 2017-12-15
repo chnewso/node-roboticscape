@@ -33,9 +33,9 @@ rc.state("RUNNING");
 
 /* Exercise the robotics cape hardware */
 rc.led("GREEN", true);
-rc.on("PAUSE_PRESSED", function() { 
+rc.on("PAUSE_PRESSED", function() {
     console.log("PAUSE pressed");
-    
+
     /* Set the state to EXITING */
     rc.state("EXITING");
 });
@@ -64,6 +64,7 @@ setInterval(function() {
 -   [on](#on)
 -   [motor](#motor)
 -   [encoder](#encoder)
+-   [servo](#servo)
 
 ## initialize
 
@@ -139,7 +140,7 @@ rc.on("MODE_RELEASED", function() { console.log("MODE button released."); });
 
 **Parameters**
 
--  `event` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** name 
+-  `event` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** name
    of event should be one of "PAUSE\_PRESSED", "PAUSE\_RELEASED", "MODE\_PRESSED" or "MODE\_RELEASED".
 -  `callback` **[Function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function)** function
    doesn\'t take any arguments.
@@ -159,8 +160,8 @@ rc.motor(1, 0.3);
 
 **Parameters**
 
--  `motor` **[Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** the 
-   motor to target.  (Optional, defaults to setting the value for all motors. Remove if not used; do not just set 
+-  `motor` **[Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** the
+   motor to target.  (Optional, defaults to setting the value for all motors. Remove if not used; do not just set
    to `undefined`.)
 -  `value` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String) | [Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** value
    or mode to set motor or motors. Can be one of "ENABLE", "DISABLE", "FREE_SPIN", "BRAKE" or a number from
@@ -181,13 +182,34 @@ rc.encoder(1, 0);
 
 **Parameters**
 
--  `encoder` **[Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** the 
+-  `encoder` **[Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** the
    index of the encoder to read or set.
 -  `value` **[Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** value
    to which to set the encoder count.  (Optional, defaults to reading only.)
 
 Returns **[Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** current
    encoder count.
+
+## servo
+
+   Control servos.
+
+   See the [Servos & ESCs libroboticscape documentation](http://www.strawsondesign.com/#!manual-servos).
+
+   **Examples**
+
+   ```javascript
+   rc.servo(1, .5);
+   ```
+
+   **Parameters**
+
+   -  `servo` **[Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** the
+      index of the servo to control.
+   -  `position` **[Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** position
+      to which to set the servo to. Number should be between -1 and 1, possibly between -1.5 and 1.5.
+
+   Returns **[Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** result.
 
 ## adc
 
@@ -203,7 +225,7 @@ var value = rc.adc(1);
 
 **Parameters**
 
--  `channel` **[Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number) | [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** the 
+-  `channel` **[Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number) | [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** the
    channel to read. Possible values are "BATTERY", "DC_JACK", 0, 1, 2 or 3.
 
 Returns **[Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** voltage
