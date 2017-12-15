@@ -51,6 +51,15 @@ function doneWithMotors() {
     console.log("Encoders read " + enc1 + ", " + enc2 + ", " + enc3 + ", " + enc4);
     console.log("Disabling all motors");
     rc.motor("DISABLE");
+    setTimeout(testServos, 2000);
+}
+
+function testServos() {
+    console.log("Moving all servos to a random position");
+    let i = 0;
+    for(; i < 8; i++) {
+      rc.servo(i, Math.random());
+    }
     setTimeout(setRed, 1000);
 }
 
